@@ -1,5 +1,7 @@
 import pandas as pd
 import glob
+from hashlib import sha256
+
 
 # Contains code to compile the shelf data file with attribute data files
 # a folder must contain only linking data
@@ -23,8 +25,10 @@ def __read_shelf(
 ):
     """Reads shelf data given the filepaths
     """
-    shelf_path = [path for path in filepaths if 'attributes' not in path][0]
-    df = pd.read_json(shelf_path)
+    shelf_paths = [path for path in filepaths if 'attributes' not in path]
+    df = pd.read_json(shelf_paths[0])
+    for file in shelf_paths[1:]:
+        df = pd.concat([df, pd.read_json(file)]).reset_index().drop('index', axis=1)
     
     return df
 
@@ -83,3 +87,47 @@ def compile_data(
     attribute_df = __merge_attributes(filepaths)
     df = __join_2shelf(attribute_df, filepaths)
     df.to_json(directory_path[:-1]+category_name+'.json')
+    
+
+def letters_to_numbers(
+    string,
+):
+    """Converts all letters in a string to a number
+    """
+    new_string = ''
+    for char in string:
+        if char.isdigit():
+            new_string += str(char)
+        else:
+            new_string += str(ord(char) - 96)
+            
+    return new_string
+        
+    
+def encode_retailer_code(
+    df,
+):
+    """Encodes retailer code
+    """
+    df['code'] = df['remotekey'].apply(lambda x: (sha256(repr(x).encode('utf-8')).hexdigest()))
+    df['code'] = df['code'].apply(lambda x: letters_to_numbers(x))
+    df['code'] = df['code'].astype('str')
+    
+    return df
+    
+
+def join_y(
+    df,
+    y,
+):
+    """Encodes scraped retail codes and joins the y data
+    """
+    df = encode_retailer_code(df)
+    sales_df = pd.read_csv('C:\\Users\\Administrator\\expenditure_prox\\'+y)
+    sales_df.drop('Unnamed: 0', axis=1, inplace=True)
+    sales_df['code'] = sales_df['code'].astype('str')
+    df = df.merge(sales_df, on='code')
+    
+    return df
+    
+    
