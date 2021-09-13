@@ -123,7 +123,7 @@ def join_y(
     """Encodes scraped retail codes and joins the y data
     """
     df = encode_retailer_code(df)
-    sales_df = pd.read_csv('C:\\Users\\Administrator\\expenditure_prox\\'+y)
+    sales_df = pd.read_csv(y)
     sales_df.drop('Unnamed: 0', axis=1, inplace=True)
     sales_df['code'] = sales_df['code'].astype('str')
     df = df.merge(sales_df, on='code')
