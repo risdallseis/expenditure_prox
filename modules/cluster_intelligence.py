@@ -4,6 +4,10 @@
 from IPython.display import display, HTML
 from sklearn.tree import _tree, DecisionTreeClassifier
 import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
+import seaborn as sns
+
 
 def pretty_print(df):
     return display( HTML( df.to_html().replace("\\n","<br>") ) )
@@ -65,3 +69,23 @@ def cluster_report(data: pd.DataFrame, clusters, min_samples_leaf=50, pruning_le
     report_df = pd.DataFrame(report_class_list, columns=['class_name', 'rule_list'])
     report_df = pd.merge(cluster_instance_df, report_df, on='class_name', how='left')
     pretty_print(report_df.sort_values(by='class_name')[['class_name', 'instance_count', 'rule_list']])
+
+
+def evaluate_clusters(
+    X,
+    predicted_y,
+    real_y,
+    binned_y,
+    qbinned_y,
+ 
+):
+    """Evaluates clustering results, uses silouette and rand if specified. Cannot be used with DBSCAN"""
+    s_score = silhouette_score(X, predicted_y)
+    f, axes = plt.subplots(3,1, figsize=(10,15))
+    sns.kdeplot(predicted_y, real_y.astype(int), shade=True,shade_lowest=True,cbar=True, ax=axes[0])
+    axes[0].set_title('Cluster labels with total sales')
+    sns.kdeplot(predicted_y, binned_y.astype(int), shade=True, shade_lowest=True, cbar=True, ax=axes[1])
+    axes[1].set_title('Cluster labels with spacially binned sales')
+    sns.kdeplot(predicted_y, qbinned_y.astype(int), shade=True, shade_lowest=True, cbar=True, ax=axes[2])
+    axes[1].set_title('Cluster labels with quantile binned sales')
+    print(f"Silhouette score: {s_score}")
