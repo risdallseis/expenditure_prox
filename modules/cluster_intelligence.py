@@ -75,17 +75,9 @@ def evaluate_clusters(
     X,
     predicted_y,
     real_y,
-    binned_y,
-    qbinned_y,
- 
 ):
     """Evaluates clustering results, uses silouette and rand if specified. Cannot be used with DBSCAN"""
     s_score = silhouette_score(X, predicted_y)
     f, axes = plt.subplots(3,1, figsize=(10,15))
     sns.kdeplot(predicted_y, real_y.astype(int), shade=True,shade_lowest=True,cbar=True, ax=axes[0])
     axes[0].set_title('Cluster labels with total sales')
-    sns.kdeplot(predicted_y, binned_y.astype(int), shade=True, shade_lowest=True, cbar=True, ax=axes[1])
-    axes[1].set_title('Cluster labels with spacially binned sales')
-    sns.kdeplot(predicted_y, qbinned_y.astype(int), shade=True, shade_lowest=True, cbar=True, ax=axes[2])
-    axes[1].set_title('Cluster labels with quantile binned sales')
-    print(f"Silhouette score: {s_score}")
