@@ -29,6 +29,15 @@ def no_positive_reviews(list_scores):
     return no_reviews 
 
 
+def get_y_true(df):
+	"""Get true y values based on total_sales zscore"""
+	df['zscore'] = (df['TOTAL_SALES']-df['TOTAL_SALES'].mean())/df['TOTAL_SALES'].std()
+	df.loc[(df['zscore'] >=1), 'y_true'] = -1
+	df.loc[(df['zscore'] <1), 'y_true'] = 0
+
+	return df.drop('zscore', axis=1)
+
+
 def generate_features(df):
     """Generates some features after preproc"""
     df['neg_reviews'] = df['review_rating'].apply(lambda x: no_negative_reviews(x))
