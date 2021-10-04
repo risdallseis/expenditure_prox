@@ -61,8 +61,9 @@ def get_best_models(results):
             best_models = pd.concat([best_models, result_df],axis=0)
         else:
             pass
-    best_models['combined_score'] = (best_models['precision_mean']+best_models['recall_mean'])/2
+    best_models['f1_score'] = (2*best_models['precision_mean']*best_models['recall_mean'])/(best_models['precision_mean']+best_models['recall_mean'])
+    #best_models['combined_score'] = (best_models['precision_mean']+best_models['recall_mean'])/2
     best_models = best_models.drop_duplicates()
-    best_models = best_models.sort_values(by=['combined_score'], axis=0, ascending=False)
+    best_models = best_models.sort_values(by=['f1_score'], axis=0, ascending=False)
 
     return best_models
