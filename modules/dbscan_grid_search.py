@@ -45,7 +45,7 @@ def run_dbscan_gs(
                     results = pd.concat([results, result_df], axis=0)
             except ValueError:
                 pass
-
+    results.drop_duplicates(['category','eps','m_samples_divisor','no_clusters'],inplace=True)
     return results
             
 
@@ -117,13 +117,13 @@ def run_dbscan_gs_noeval(
                         result_df = pd.DataFrame(data=interim_results)
                         results = pd.concat([results, result_df], axis=0)
             except ValueError as err:
-                print(err.args)
+                
                 pass
     results.drop_duplicates(['category','eps','m_samples_divisor','no_clusters','outlier_prop'],inplace=True)
-
+    results['m_samples_divisor'] = results['m_samples_divisor'].astype(int)
     return results
 
-
+# NOT USING THIS ONE
 def get_best_noevals(results):
     """finds best models for models without evaluation - using mininmum eps param"""
     df = pd.DataFrame(columns=['iteration','category','eps','m_samples_divisor',
@@ -135,3 +135,14 @@ def get_best_noevals(results):
     
     return df
 
+
+def get_best_noevals2(results):
+    """finds best models for models without evaluation - using mininmum eps param"""
+    df = pd.DataFrame(columns=['iteration','category','eps','m_samples_divisor',
+    'features','no_clusters','outlier_prop','precision','recall','f1'
+    ])
+    cats = ['laptops', 'phones', 'tablets','desktops']
+    for c in cats:
+        df = pd.concat([df, results[results['category']==c].nlargest(1,'m_samples_divisor')])
+    
+    return df
