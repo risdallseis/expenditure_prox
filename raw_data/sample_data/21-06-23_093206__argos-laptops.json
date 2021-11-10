@@ -1,0 +1,38 @@
+{
+    "product_name": [
+        "hp pav 15.6in r7 8gb 512gb gtx1660ti gaming laptop bundle",
+        "hp omen 15.6in i7 16gb 1tb ssd rtx2060 fhd gaming laptop",
+        "hp pavilion 17.3in i5 8gb 1tb 512gb gtx1650ti gaming laptop",
+        "lenovo ideapad l340 15in i5 8gb 128gb gtx1650 gaming laptop",
+        "asus tuf f15 15.6in i7 8gb 512gb rtx3060 gaming laptop",
+        "predator helios 300 i7 16gb 1tb 256gb rtx2060 gaming laptop",
+        "acer nitro 5 15.6in i7 8gb 512gb gtx1660ti gaming laptop"
+    ],
+    "urls": [
+        "https://www.argos.co.uk/product/8095330",
+        "https://www.argos.co.uk/product/8848068",
+        "https://www.argos.co.uk/product/9304295",
+        "https://www.argos.co.uk/product/8947794",
+        "https://www.argos.co.uk/product/9361575",
+        "https://www.argos.co.uk/product/8741859",
+        "https://www.argos.co.uk/product/8732466"
+    ],
+    "remotekey": [
+        "8095330",
+        "8848068",
+        "9304295",
+        "8947794",
+        "9361575",
+        "8741859",
+        "8732466"
+    ],
+    "shelf_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ]
+}
